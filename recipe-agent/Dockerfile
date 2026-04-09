@@ -10,4 +10,4 @@ COPY . .
 
 EXPOSE 8765
 
-CMD [".venv/bin/python", "-m", "recipe_agent.agent"]
+CMD ["/app/.venv/bin/python", "-m", "recipe_agent.agent"]
