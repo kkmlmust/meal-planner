@@ -6,7 +6,16 @@ A Telegram bot that tracks what you cook, manages your pantry ingredients, and u
 
 ## Demo
 
-**Start a conversation:**
+> **Screenshot 1:** Telegram bot `/start` command showing welcome message and instructions.
+![Welcome message](screenshots/helloMessage.png)
+
+> **Sreenshot 2:** User adding ingredients (`I have chicken, rice, tomatoes, and onion`) and bot confirming each addition.
+![Adding ingredients](screenshots/ingredientAdding.png)
+> **Screenshot 3:** User sending `/suggest` and bot displaying AI-generated recipe suggestions with cooking time.
+![Dish suggestion](screenshots/dishSuggest.png)
+> **Screenshot 4:** User selecting a recipe and bot confirming it was logged to cooking history.
+![History](screenshots/history.png)
+**Example conversation:**
 ```
 User: /start
 Bot: 👋 Welcome to the Recipe Tracker Bot! I'm your AI-powered cooking assistant...
