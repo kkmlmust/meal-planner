@@ -3,10 +3,10 @@ from pydantic import Field
 
 
 class Settings(BaseSettings):
-    # LLM connection (via qwen-code-api OAuth proxy)
-    llm_base_url: str = Field(default="http://localhost:8080/v1", alias="RECIPE_AGENT_LLM_BASE_URL")
-    llm_api_key: str = Field(default="sk-qwen-local", alias="RECIPE_AGENT_LLM_API_KEY")
-    llm_model: str = Field(default="coder-model", alias="RECIPE_AGENT_LLM_MODEL")
+    # LLM connection (Ollama Cloud - OpenAI compatible API)
+    llm_base_url: str = Field(default="https://ollama.com/v1", alias="RECIPE_AGENT_LLM_BASE_URL")
+    llm_api_key: str = Field(default="", alias="RECIPE_AGENT_LLM_API_KEY")
+    llm_model: str = Field(default="qwen2.5-coder:7b", alias="RECIPE_AGENT_LLM_MODEL")
 
     # Agent access
     access_key: str = Field(default="local-agent-key", alias="RECIPE_AGENT_ACCESS_KEY")

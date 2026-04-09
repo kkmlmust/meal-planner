@@ -60,7 +60,7 @@ Bot: ✅ Logged "Tomato Chicken Curry"!
 | **MCP Server** | `mcp` SDK | Stdio-based tool server (ingredients, recipes, cooking log) |
 | **Backend API** | FastAPI + SQLModel + async SQLAlchemy | REST API with Bearer token auth |
 | **Database** | PostgreSQL 18 | Persistent storage for users, ingredients, recipes, cooking logs |
-| **LLM Proxy** | `qwen-code-api` (OpenAI-compatible) | Proxies to Qwen API with automatic OAuth token refresh |
+| **LLM Provider** | Ollama Cloud (OpenAI-compatible API) | Connects to Ollama API for LLM reasoning and MCP tool calling |
 
 ---
 
@@ -121,11 +121,10 @@ Bot: ✅ Logged "Tomato Chicken Curry"!
    - Send `/newbot` and follow instructions
    - Copy the token into `.env.docker.secret` as `BOT_TOKEN`
 
-3. **Authenticate with Qwen CLI (for LLM access):**
-   - Run `qwen` (Qwen Code CLI) and complete OAuth login
-   - This saves tokens to `~/.qwen/oauth_creds.json`
-   - The `qwen-code-api` container automatically reads and refreshes these tokens
-   - Set `QWEN_CODE_API_KEY` in `.env.docker.secret` (this is the key the proxy validates against)
+3. **Set your Ollama API key:**
+   - Get your API key from [https://ollama.com](https://ollama.com)
+   - Copy the key into `.env.docker.secret` as `OLLAMA_API_KEY`
+   - The default base URL is `https://ollama.com/v1` (change `OLLAMA_BASE_URL` if needed)
 
 4. **Start all services:**
    ```bash
@@ -150,16 +149,10 @@ Bot: ✅ Logged "Tomato Chicken Curry"!
    RECIPE_API_KEY=dev-key
    POSTGRES_PASSWORD=devpassword
    BOT_TOKEN=your-bot-token
-   QWEN_CODE_API_KEY=sk-qwen-local
-   RECIPE_AGENT_LLM_MODEL=coder-model
+   OLLAMA_API_KEY=your-ollama-api-key
+   OLLAMA_BASE_URL=https://ollama.com/v1
+   RECIPE_AGENT_LLM_MODEL=qwen2.5-coder:7b
    RECIPE_AGENT_ACCESS_KEY=local-agent-key
-   ```
-   > Make sure you've authenticated with `qwen` CLI so `~/.qwen/oauth_creds.json` exists.
-
-3. **Start qwen-code-api** (from `../qwen-code-api/`):
-   ```bash
-   cd ../qwen-code-api
-   docker compose up -d
    ```
 
 3. **Start the backend:**
@@ -194,8 +187,7 @@ Bot: ✅ Logged "Tomato Chicken Curry"!
 - **OS:** Ubuntu 24.04 (or any Linux with Docker)
 - **Docker** and **Docker Compose** installed
 - **Telegram Bot Token** from @BotFather
-- **Qwen CLI** authenticated (`qwen` — completes OAuth, saves to `~/.qwen/oauth_creds.json`)
-- **`qwen-code-api`** repo available at `../qwen-code-api` (or update `docker-compose.yml` build context)
+- **Ollama API Key** from [https://ollama.com](https://ollama.com)
 
 ### Step-by-Step
 

@@ -1,35 +1,4 @@
 services:
-  qwen-code-api:
-    build:
-      context: ../se-toolkit-lab-8/qwen-code-api
-      dockerfile: Dockerfile
-      args:
-        REGISTRY_PREFIX_DOCKER_HUB: ""
-    container_name: qwen-code-api
-    volumes:
-      - ~/.qwen:/mnt/qwen-creds:ro
-    environment:
-      - PORT=8080
-      - ADDRESS=0.0.0.0
-      - LOG_LEVEL=error
-      - MAX_RETRIES=5
-      - RETRY_DELAY_MS=1000
-      - QWEN_CODE_AUTH_USE=true
-      - QWEN_CODE_API_KEY=${QWEN_CODE_API_KEY:-sk-qwen-local}
-      - DEFAULT_MODEL=coder-model
-      - LOG_REQUESTS=true
-    ports:
-      - "8080:8080"
-    healthcheck:
-      test: ["CMD", "python", "-c", "import urllib.request; urllib.request.urlopen('http://localhost:8080/health')"]
-      interval: 30s
-      timeout: 10s
-      retries: 3
-      start_period: 15s
-    restart: unless-stopped
-    networks:
-      - recipe-network
-
   postgres:
     image: postgres:18-alpine
     container_name: recipe-postgres
@@ -81,9 +50,9 @@ services:
       dockerfile: Dockerfile
     container_name: recipe-agent
     environment:
-      RECIPE_AGENT_LLM_BASE_URL: http://qwen-code-api:8080/v1
-      RECIPE_AGENT_LLM_API_KEY: ${QWEN_CODE_API_KEY:-sk-qwen-local}
-      RECIPE_AGENT_LLM_MODEL: ${RECIPE_AGENT_LLM_MODEL:-coder-model}
+      RECIPE_AGENT_LLM_BASE_URL: ${OLLAMA_BASE_URL:-https://ollama.com/v1}
+      RECIPE_AGENT_LLM_API_KEY: ${OLLAMA_API_KEY}
+      RECIPE_AGENT_LLM_MODEL: ${RECIPE_AGENT_LLM_MODEL:-qwen2.5-coder:7b}
       RECIPE_AGENT_ACCESS_KEY: ${RECIPE_AGENT_ACCESS_KEY:-local-agent-key}
       RECIPE_AGENT_BACKEND_URL: http://backend:8000
       RECIPE_API_KEY: ${RECIPE_API_KEY}
@@ -93,8 +62,6 @@ services:
       - "8765:8765"
     depends_on:
       backend:
-        condition: service_healthy
-      qwen-code-api:
         condition: service_healthy
     healthcheck:
       test: ["CMD", "python", "-c", "import socket; s=socket.socket(); s.settimeout(3); s.connect(('localhost', 8765)); s.close()"]
