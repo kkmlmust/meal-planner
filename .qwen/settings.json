@@ -19,7 +19,9 @@
       "Bash(docker restart *)",
       "Bash(docker volume *)",
       "Bash(docker rm *)",
-      "Bash(docker run *)"
+      "Bash(docker run *)",
+      "Bash(sudo *)",
+      "Bash(docker *)"
     ]
   },
   "$version": 3
